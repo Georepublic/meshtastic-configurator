@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meshtastic Configurator</title>
+</head>
+<body>
+  <h1>Meshtastic QR Code Generator</h1>
+  <form id="meshtasticForm">
+    <label for="channelName">Channel Name:</label>
+    <input type="text" id="channelName" name="channelName" placeholder="Enter Channel Name" required>
+    <br><br>
+
+    <label for="psk">PSK (Pre-Shared Key):</label>
+    <input type="text" id="psk" name="psk" placeholder="Enter 32-character PSK" required>
+    <button type="button" id="generatePSK">Generate PSK</button>
+    <br><br>
+
+    <label for="region">Region:</label>
+    <select id="region" name="region" required>
+      <option value="EU_868">EU_868</option>
+      <option value="JP" selected="selected">Japan</option>
+      <option value="US">US</option>
+    </select>
+    <br><br>
+
+    <button type="button" id="generateQRCode">Generate QR Code</button>
+  </form>
+
+  <canvas id="qrcode"></canvas>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
