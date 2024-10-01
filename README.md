@@ -75,18 +75,6 @@ yarn serve
 
 This will serve the files from the `dist/` directory and make them accessible locally.
 
-### 7. Adding New Features
-
-- To modify the configurator or add new features, edit the files in the `src/` folder. The development server (`yarn dev`) will automatically recompile and reload the project in your browser with hot-module replacement.
-
-### 8. How It Works
-
-This project uses the **Meshtastic JavaScript API** (`@meshtastic/js`) to generate a valid Meshtastic URL from the input data. It also uses **Protobuf** to encode channel configurations, which are then converted to Base64 and displayed as a QR code.
-
-- **Pre-Shared Key (PSK)**: The PSK is randomly generated as a 32-character hexadecimal string.
-- **Channel Settings**: Users can configure the channel name and select a region for the LoRa network.
-- **QR Code Generation**: A QR code is generated using the `qrcode` library, which encodes the Meshtastic URL that can be scanned by devices.
-
 ### License
 
 This project is licensed under the **GPLv3 License**. See the [LICENSE](LICENSE) file for more details.
