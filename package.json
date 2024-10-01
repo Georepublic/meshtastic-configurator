@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": "git@github.com:Georepublic/meshtastic-configurator.git",
   "author": "Daniel Kastl (Georepublic)",
-  "license": "GPLv3",
+  "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/qrcode": "^1.5.5",
     "concurrently": "^9.0.1",

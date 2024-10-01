@@ -77,4 +77,4 @@ This will serve the files from the `dist/` directory and make them accessible lo
 
 ### License
 
-This project is licensed under the **GPLv3 License**. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the **GPL-3.0-or-later**. See the [LICENSE](LICENSE) file for more details.
