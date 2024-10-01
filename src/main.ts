@@ -93,7 +93,14 @@ async function generateQRCode(): Promise<void> {
  */
 function copyUrlToClipboard(): void {
   const urlField = document.getElementById('generatedUrl') as HTMLInputElement;
-  urlField.select();
-  document.execCommand('copy');
-  alert('URL copied to clipboard!');
+
+  // Use the Clipboard API to copy the URL
+  navigator.clipboard.writeText(urlField.value)
+      .then(() => {
+          alert('URL copied to clipboard!');
+      })
+      .catch(err => {
+          console.error('Failed to copy text: ', err);
+          alert('Failed to copy URL');
+      });
 }
