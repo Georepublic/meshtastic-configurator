@@ -1,5 +1,7 @@
 // formHandler.ts
 
+import { determinePskType } from './pskHandler';
+
 /**
  * Get the values from the form using FormData API.
  */
@@ -64,13 +66,8 @@ export function populateForm(formValues: any) {
   (form.elements.namedItem('ignoreMqtt') as HTMLInputElement).checked = formValues.ignoreMqtt || false;
   (form.elements.namedItem('configOkToMqtt') as HTMLInputElement).checked = formValues.configOkToMqtt || false;
 
-  // Set the pskType based on the byte length of the psk (psk.length / 2)
-  let pskType = 'none';  // Default to 'none'
-  if (formValues.psk && formValues.psk.length === 64) {
-    pskType = 'aes256';  // AES-256
-  } else if (formValues.psk && formValues.psk.length === 32) {
-    pskType = 'aes128';  // AES-128
-  }
+  // Set the pskType based on the byte length of the PSK
+  const pskType = determinePskType(formValues.psk?.length || 0);
 
   // Update the pskType dropdown
   (form.elements.namedItem('pskType') as HTMLSelectElement).value = pskType;

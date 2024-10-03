@@ -39,3 +39,36 @@ export function fromUrlSafeBase64(base64String: string): Uint8Array {
 
   return toByteArray(paddedBase64);
 }
+
+/**
+ * Copy the generated URL to the clipboard.
+ * @returns void
+ */
+export function copyUrlToClipboard(): void {
+  const urlField = document.getElementById('generatedUrl') as HTMLInputElement;
+
+  navigator.clipboard.writeText(urlField.value)
+    .then(() => {
+      showCopyNotification();
+    })
+    .catch(err => {
+      console.error('Failed to copy text: ', err);
+      alert('Failed to copy URL');
+    });
+}
+
+/**
+ * Show the "URL copied" notification with animation
+ */
+export function showCopyNotification(): void {
+  const notification = document.getElementById('copyNotification');
+
+  if (notification) {
+    notification.classList.add('show');
+
+    // Hide the notification after 2 seconds
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 2000);
+  }
+}
