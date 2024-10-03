@@ -81,8 +81,14 @@
       <legend>Module Settings</legend>
 
       <div class="form-group">
-        <label for="positionPrecision">Position Precision (0-32):</label>
-        <input type="number" id="positionPrecision" name="positionPrecision" min="0" max="32" value="0">
+        <label for="positionPrecision">Position Precision:</label>
+        <select id="positionPrecision" name="positionPrecision">
+          <option value="0">Location data is never sent</option>
+          <option value="11">Large region (±11 kilometers)</option>
+          <option value="13">City-sized region (±3 kilometers)</option>
+          <option value="16">Neighborhood-level (±350 meters)</option>
+          <option value="32" selected="selected">Full precision</option>
+        </select>
       </div>
 
       <div class="form-group">
