@@ -2,7 +2,7 @@ import { getFormValues } from './formHandler';
 import { generatePSK } from './pskGenerator';
 import { buildProtobuf } from './protobufBuilder';
 import { generateQRCode } from './qrCodeGenerator';
-import { getByteLength, generateChannelId, toUrlSafeBase64 } from './utils';
+import { getByteLength, toUrlSafeBase64 } from './utils';
 
 /**
  * Handle the DOMContentLoaded event.
@@ -11,7 +11,6 @@ import { getByteLength, generateChannelId, toUrlSafeBase64 } from './utils';
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('generateConfig')?.addEventListener('click', generateConfig);
   document.getElementById('generatePSK')?.addEventListener('click', handleGeneratePSK);
-  document.getElementById('generateChannelId')?.addEventListener('click', handleGenerateChannelId);
   document.getElementById('pskType')?.addEventListener('change', handlePSKTypeChange);
   document.getElementById('copyUrlButton')?.addEventListener('click', copyUrlToClipboard);
 });
@@ -41,15 +40,6 @@ function handleGeneratePSK(): void {
   const pskType = (document.getElementById('pskType') as HTMLSelectElement).value;
   const psk = generatePSK(pskType);
   (document.getElementById('psk') as HTMLInputElement).value = psk;
-}
-
-/**
- * Handle the click event on the "Generate Channel ID" button.
- * Generate a random Channel ID and set the value in the input field.
- */
-function handleGenerateChannelId(): void {
-  const channelId = generateChannelId();
-  (document.getElementById('channelId') as HTMLInputElement).value = channelId;
 }
 
 /**

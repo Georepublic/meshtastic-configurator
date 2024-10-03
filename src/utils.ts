@@ -11,14 +11,6 @@ export function getByteLength(str: string): number {
 }
 
 /**
- * Generate a random Channel ID.
- * @returns
- */
-export function generateChannelId(): string {
-  return Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase();
-}
-
-/**
  * Convert binary data to a URL-safe Base64 string.
  * @param binaryData - The binary data to encode.
  * @returns URL-safe Base64 string

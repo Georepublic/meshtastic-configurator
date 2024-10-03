@@ -19,8 +19,6 @@ export function getFormValues() {
 
   // FormData returns strings, so we need to parse the necessary fields
   const region = Number(formData.get('region'));
-  const role = Number(formData.get('role'));
-  const index = Number(formData.get('index'));
   const modemPreset = Number(formData.get('modemPreset'));
   const hopLimit = Number(formData.get('hopLimit'));
 
@@ -32,19 +30,13 @@ export function getFormValues() {
   const configOkToMqtt = formData.get('configOkToMqtt') === 'on';
   const ignoreMqtt = formData.get('ignoreMqtt') === 'on';
 
-  // Handle default value for channelId
-  const channelId = formData.get('channelId') as string || generateChannelId();
-
   return {
     channelName,
     pskType,
     psk,
     region,
-    role,
-    index,
     modemPreset,
     hopLimit,
-    channelId,
     uplinkEnabled,
     downlinkEnabled,
     positionPrecision,

@@ -8,9 +8,6 @@ import { Protobuf } from "@meshtastic/js";
  * @param region - The region for the channel.
  * @param modemPreset - The modem preset for the channel.
  * @param hopLimit - The hop limit for the channel.
- * @param role - The role for the channel.
- * @param index - The index for the channel.
- * @param channelId - The channel ID for the channel.
  * @param uplinkEnabled - Whether uplink is enabled.
  * @param downlinkEnabled - Whether downlink is enabled.
  * @param positionPrecision - The position precision for the channel.
@@ -26,9 +23,6 @@ export function buildProtobuf({
   region,
   modemPreset,
   hopLimit,
-  role,
-  index,
-  channelId,
   uplinkEnabled,
   downlinkEnabled,
   positionPrecision,
@@ -42,9 +36,6 @@ export function buildProtobuf({
   region: number;
   modemPreset: number;
   hopLimit: number;
-  role: number;
-  index: number;
-  channelId: string;
   uplinkEnabled: boolean;
   downlinkEnabled: boolean;
   positionPrecision: number;
@@ -74,11 +65,6 @@ export function buildProtobuf({
     uplinkEnabled: uplinkEnabled || false,
     downlinkEnabled: downlinkEnabled || false,
     moduleSettings: moduleSettings
-  });
-
-  const channel = new Protobuf.Channel.Channel({
-    index,
-    role,
   });
 
   const channelSet = new Protobuf.AppOnly.ChannelSet({
