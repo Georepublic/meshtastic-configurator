@@ -1,4 +1,4 @@
-import { fromByteArray } from "base64-js";
+import { fromByteArray, toByteArray } from "base64-js";
 
 /**
  * Utility function to calculate the byte length of a string.
@@ -20,4 +20,20 @@ export function toUrlSafeBase64(binaryData: Uint8Array): string {
     .replace(/=/g, "")
     .replace(/\+/g, "-")
     .replace(/\//g, "_");
+}
+
+/**
+ * Convert a URL-safe Base64 string back to binary data.
+ * @param base64String - The URL-safe Base64 string to decode.
+ * @returns {Uint8Array} - The decoded binary data.
+ */
+export function fromUrlSafeBase64(base64String: string): Uint8Array {
+  // Replace URL-safe characters with standard Base64 characters
+  const paddedBase64 = base64String
+    .replace(/-/g, "+")
+    .replace(/_/g, "/")
+    // Re-add padding if necessary (Base64 strings must be divisible by 4)
+    .padEnd(base64String.length + (4 - (base64String.length % 4)) % 4, "=");
+
+  return toByteArray(paddedBase64);
 }

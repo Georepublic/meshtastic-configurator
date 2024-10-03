@@ -44,3 +44,24 @@ export function getFormValues() {
     ignoreMqtt,
   };
 }
+
+/**
+ * Populate the form with values from the configuration.
+ * @param formValues - The object containing values to populate the form.
+ */
+export function populateForm(formValues: any) {
+  const form = document.getElementById('meshtasticForm') as HTMLFormElement | null;
+  if (!form) throw new Error('Form element not found.');
+
+  (form.elements.namedItem('channelName') as HTMLInputElement).value = formValues.channelName || '';
+  (form.elements.namedItem('psk') as HTMLInputElement).value = formValues.psk || '';
+  (form.elements.namedItem('uplinkEnabled') as HTMLInputElement).checked = formValues.uplinkEnabled || false;
+  (form.elements.namedItem('downlinkEnabled') as HTMLInputElement).checked = formValues.downlinkEnabled || false;
+  (form.elements.namedItem('positionPrecision') as HTMLInputElement).value = String(formValues.positionPrecision || 0);
+  (form.elements.namedItem('isClientMuted') as HTMLInputElement).checked = formValues.isClientMuted || false;
+  (form.elements.namedItem('region') as HTMLSelectElement).value = String(formValues.region || 0);
+  (form.elements.namedItem('modemPreset') as HTMLSelectElement).value = String(formValues.modemPreset || 0);
+  (form.elements.namedItem('hopLimit') as HTMLInputElement).value = String(formValues.hopLimit || 3);
+  (form.elements.namedItem('ignoreMqtt') as HTMLInputElement).checked = formValues.ignoreMqtt || false;
+  (form.elements.namedItem('configOkToMqtt') as HTMLInputElement).checked = formValues.configOkToMqtt || false;
+}

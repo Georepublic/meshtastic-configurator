@@ -1,14 +1,24 @@
-import { getFormValues } from './formHandler';
+import { getFormValues, populateForm } from './formHandler';
 import { generatePSK } from './pskGenerator';
 import { buildProtobuf } from './protobufBuilder';
 import { generateQRCode } from './qrCodeGenerator';
-import { getByteLength, toUrlSafeBase64 } from './utils';
+import { getByteLength, toUrlSafeBase64, fromUrlSafeBase64 } from './utils';
+import { Protobuf } from "@meshtastic/js";
 
 /**
  * Handle the DOMContentLoaded event.
  * Add event listeners to the buttons and form fields.
  */
 document.addEventListener('DOMContentLoaded', () => {
+  // Check if there is a configuration in the URL hash and load it
+  const urlHash = window.location.hash.substring(1);  // Remove the "#" character
+  if (urlHash) {
+    loadConfigurationFromHash(urlHash);
+  }
+
+  // Generate QR code for the default form values
+  generateConfig();
+
   // Listen for changes on all form inputs and selects
   document.querySelectorAll('#meshtasticForm input, #meshtasticForm select').forEach(element => {
     element.addEventListener('input', generateConfig);
@@ -22,10 +32,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add click listener for copying the URL
   document.getElementById('copyUrlButton')?.addEventListener('click', copyUrlToClipboard);
-
-  // Generate QR Code on first page load
-  generateConfig();
 });
+
+/**
+ * Load the configuration from the hash and populate the form.
+ * @param {string} hash - The URL-safe Base64 configuration string.
+ */
+function loadConfigurationFromHash(hash: string): void {
+  try {
+    const binaryData = fromUrlSafeBase64(hash);
+    const channelSet = Protobuf.AppOnly.ChannelSet.fromBinary(binaryData);
+
+    // Extract the channel settings from the Protobuf message
+    const channelSettings = channelSet.settings[0];
+    const formValues = {
+      channelName: channelSettings.name,
+      psk: new TextDecoder().decode(channelSettings.psk),
+      uplinkEnabled: channelSettings.uplinkEnabled,
+      downlinkEnabled: channelSettings.downlinkEnabled,
+      positionPrecision: channelSettings.moduleSettings?.positionPrecision || 0,
+      isClientMuted: channelSettings.moduleSettings?.isClientMuted || false,
+      region: channelSet.loraConfig.region,
+      modemPreset: channelSet.loraConfig.modemPreset,
+      hopLimit: channelSet.loraConfig.hopLimit,
+      ignoreMqtt: channelSet.loraConfig.ignoreMqtt,
+      configOkToMqtt: channelSet.loraConfig.configOkToMqtt,
+    };
+
+    // Populate the form with these values using formHandler
+    populateForm(formValues);
+  } catch (error) {
+    console.error("Error loading configuration from URL hash:", error);
+  }
+}
 
 /**
  * Handle the change event on the PSK type select element.
@@ -79,6 +118,9 @@ async function generateConfig(): Promise<void> {
 
   // Convert to URL-safe Base64 string
   const base64 = toUrlSafeBase64(binaryData);
+
+  // Update the URL hash with the generated configuration
+  window.location.hash = `#${base64}`;
 
   // Create the Meshtastic URL
   const meshtasticUrl = `https://meshtastic.org/e/#${base64}`;
