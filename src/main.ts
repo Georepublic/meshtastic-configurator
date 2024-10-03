@@ -6,13 +6,25 @@ import { getByteLength, toUrlSafeBase64 } from './utils';
 
 /**
  * Handle the DOMContentLoaded event.
- * Add event listeners to the buttons.
+ * Add event listeners to the buttons and form fields.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('generateConfig')?.addEventListener('click', generateConfig);
+  // Listen for changes on all form inputs and selects
+  document.querySelectorAll('#meshtasticForm input, #meshtasticForm select').forEach(element => {
+    element.addEventListener('input', generateConfig);
+  });
+
+  // Add a click listener for generating the PSK
   document.getElementById('generatePSK')?.addEventListener('click', handleGeneratePSK);
+
+  // Add change listener for PSK type
   document.getElementById('pskType')?.addEventListener('change', handlePSKTypeChange);
+
+  // Add click listener for copying the URL
   document.getElementById('copyUrlButton')?.addEventListener('click', copyUrlToClipboard);
+
+  // Generate QR Code on first page load
+  generateConfig();
 });
 
 /**
@@ -30,6 +42,9 @@ function handlePSKTypeChange(): void {
     pskField.disabled = false;
     handleGeneratePSK();
   }
+
+  // Re-generate config when PSK type changes
+  generateConfig();
 }
 
 /**
@@ -40,10 +55,13 @@ function handleGeneratePSK(): void {
   const pskType = (document.getElementById('pskType') as HTMLSelectElement).value;
   const psk = generatePSK(pskType);
   (document.getElementById('psk') as HTMLInputElement).value = psk;
+
+  // Re-generate config when PSK is generated
+  generateConfig();
 }
 
 /**
- * Generate a QR code based on the form values.
+ * Generate a QR code and URL based on the form values.
  */
 async function generateConfig(): Promise<void> {
   const formValues = getFormValues();
