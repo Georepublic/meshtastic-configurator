@@ -1,10 +1,11 @@
+// protobufBuilder.ts
+
 import { Protobuf } from "@meshtastic/js";
 
 /**
  * Build a Protobuf message for a channel.
  * @param channelName - The name of the channel.
  * @param psk - The pre-shared key for the channel.
- * @param pskType - The type of pre-shared key.
  * @param region - The region for the channel.
  * @param modemPreset - The modem preset for the channel.
  * @param hopLimit - The hop limit for the channel.
@@ -19,7 +20,6 @@ import { Protobuf } from "@meshtastic/js";
 export function buildProtobuf({
   channelName,
   psk,
-  pskType,
   region,
   modemPreset,
   hopLimit,
@@ -32,7 +32,6 @@ export function buildProtobuf({
 }: {
   channelName: string;
   psk: string;
-  pskType: string;
   region: number;
   modemPreset: number;
   hopLimit: number;
@@ -58,7 +57,7 @@ export function buildProtobuf({
   });
 
   const channelSettings = new Protobuf.Channel.ChannelSettings({
-    psk: pskType === 'none' ? new Uint8Array() : new TextEncoder().encode(psk),
+    psk: psk ? new TextEncoder().encode(psk) : new Uint8Array(),  // Encode PSK
     name: channelName,
     uplinkEnabled: uplinkEnabled || false,
     downlinkEnabled: downlinkEnabled || false,

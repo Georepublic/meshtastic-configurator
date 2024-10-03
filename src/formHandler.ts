@@ -1,3 +1,5 @@
+// formHandler.ts
+
 /**
  * Get the values from the form using FormData API.
  */
@@ -12,7 +14,6 @@ export function getFormValues() {
 
   // Extract form values and ensure the correct types
   const channelName = formData.get('channelName') as string;
-  const pskType = formData.get('pskType') as string;
   const psk = formData.get('psk') as string;
 
   // FormData returns strings, so we need to parse the necessary fields
@@ -25,13 +26,11 @@ export function getFormValues() {
   const downlinkEnabled = formData.get('downlinkEnabled') === 'on';
   const positionPrecision = Number(formData.get('positionPrecision'));
   const isClientMuted = formData.get('isClientMuted') === 'on';
-
   const configOkToMqtt = formData.get('configOkToMqtt') === 'on';
   const ignoreMqtt = formData.get('ignoreMqtt') === 'on';
 
   return {
     channelName,
-    pskType,
     psk,
     region,
     modemPreset,
@@ -64,4 +63,15 @@ export function populateForm(formValues: any) {
   (form.elements.namedItem('hopLimit') as HTMLInputElement).value = String(formValues.hopLimit || 3);
   (form.elements.namedItem('ignoreMqtt') as HTMLInputElement).checked = formValues.ignoreMqtt || false;
   (form.elements.namedItem('configOkToMqtt') as HTMLInputElement).checked = formValues.configOkToMqtt || false;
+
+  // Set the pskType based on the byte length of the psk (psk.length / 2)
+  let pskType = 'none';  // Default to 'none'
+  if (formValues.psk && formValues.psk.length === 64) {
+    pskType = 'aes256';  // AES-256
+  } else if (formValues.psk && formValues.psk.length === 32) {
+    pskType = 'aes128';  // AES-128
+  }
+
+  // Update the pskType dropdown
+  (form.elements.namedItem('pskType') as HTMLSelectElement).value = pskType;
 }

@@ -1,3 +1,5 @@
+// main.ts
+
 import { getFormValues, populateForm } from './formHandler';
 import { generatePSK } from './pskGenerator';
 import { buildProtobuf } from './protobufBuilder';
@@ -45,8 +47,19 @@ function loadConfigurationFromHash(hash: string): void {
 
     // Extract the channel settings from the Protobuf message
     const channelSettings = channelSet.settings[0];
+
+    // Determine PSK type based on the length of the PSK
+    const pskLength = channelSettings.psk.length;
+    let pskType = 'none';
+    if (pskLength === 16) {
+      pskType = 'aes128';
+    } else if (pskLength === 32) {
+      pskType = 'aes256';
+    }
+
     const formValues = {
       channelName: channelSettings.name,
+      pskType: pskType,  // Derived from PSK length
       psk: new TextDecoder().decode(channelSettings.psk),
       uplinkEnabled: channelSettings.uplinkEnabled,
       downlinkEnabled: channelSettings.downlinkEnabled,

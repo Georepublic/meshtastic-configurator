@@ -1,3 +1,5 @@
+// qrCodeGenerator.ts
+
 import QRCode from 'qrcode';
 
 /**

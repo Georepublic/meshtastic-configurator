@@ -1,3 +1,5 @@
+// pskGenerator.ts
+
 /**
  * Generate a PSK (Pre-Shared Key) for the given PSK type.
  * @param pskType
