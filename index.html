@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="data:,">
   <title>Meshtastic Configurator</title>
-  <script type="module" crossorigin src="/meshtastic-configurator/assets/index-DB7eQdZS.js"></script>
-  <link rel="stylesheet" crossorigin href="/meshtastic-configurator/assets/index-XHPdCR2m.css">
+  <script type="module" crossorigin src="/meshtastic-configurator/assets/index-PZwpkdsj.js"></script>
+  <link rel="stylesheet" crossorigin href="/meshtastic-configurator/assets/index-DsLOUPhp.css">
 </head>
 <body>
   <h1>Meshtastic QR Code Generator</h1>
 
   <form id="meshtasticForm">
     <fieldset>
-      <legend>Generate Configuration</legend>
+      <legend>Share this with others</legend>
 
       <div class="form-group">
-        <button type="button" id="generateConfig">Generate Configuration (QR Code)</button>
+        <canvas id="qrcode"></canvas>
       </div>
 
       <div class="form-group">
@@ -26,7 +26,7 @@
       </div>
 
       <div class="form-group">
-        <canvas id="qrcode"></canvas>
+        <button type="button" id="generateConfig">Generate Configuration (QR Code)</button>
       </div>
     </fieldset>
 
@@ -136,6 +136,8 @@
       </div>
     </fieldset>
   </form>
+
+  <div id="copyNotification" class="hidden">URL copied to clipboard!</div>
 
 </body>
 </html>
