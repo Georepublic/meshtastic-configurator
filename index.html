@@ -4,37 +4,184 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meshtastic Configurator</title>
-  <script type="module" crossorigin src="/assets/index-BFEbd7Zy.js"></script>
+  <style>
+    .form-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      width: 300px;
+    }
+
+    input, select, button {
+      flex-grow: 1;
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    fieldset {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    legend {
+      font-weight: bold;
+    }
+
+    button {
+      width: auto;
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/index-fk-fHULq.js"></script>
 </head>
 <body>
   <h1>Meshtastic QR Code Generator</h1>
+
   <form id="meshtasticForm">
-    <label for="channelName">Channel Name:</label>
-    <input type="text" id="channelName" name="channelName" placeholder="Enter Channel Name" required>
-    <br><br>
+    <button type="button" id="generateConfig">Generate Configuration (QR Code)</button>
 
-    <label for="psk">PSK (Pre-Shared Key):</label>
-    <input type="text" id="psk" name="psk" placeholder="Enter 32-character PSK" required>
-    <button type="button" id="generatePSK">Generate PSK</button>
-    <br><br>
+    <div>
+      <input type="text" id="generatedUrl" readonly>
+      <button type="button" id="copyUrlButton">Copy URL</button>
+    </div>
 
-    <label for="region">Region:</label>
-    <select id="region" name="region" required>
-      <option value="EU_868">EU_868</option>
-      <option value="JP" selected="selected">Japan</option>
-      <option value="US">US</option>
-    </select>
-    <br><br>
+    <canvas id="qrcode"></canvas>
 
-    <button type="button" id="generateQRCode">Generate QR Code</button>
+    <fieldset>
+      <legend>Channel Settings</legend>
+
+      <div class="form-group">
+        <label for="channelName">Channel Name (max 12 bytes):</label>
+        <input type="text" id="channelName" name="channelName" placeholder="Enter Channel Name">
+      </div>
+
+      <div class="form-group">
+        <label for="modemPreset">Modem Preset:</label>
+        <select id="modemPreset" name="modemPreset">
+          <option value="0">Long Range - Fast</option>
+          <option value="1">Long Range - Slow</option>
+          <option value="3">Medium Range - Slow</option>
+          <option value="4">Medium Range - Fast</option>
+          <option value="5">Short Range - Slow</option>
+          <option value="6">Short Range - Fast</option>
+          <option value="7">Long Range - Moderate</option>
+          <option value="8">Short Range - Turbo</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="pskType">PSK Type:</label>
+        <select id="pskType" name="pskType">
+          <option value="none">No encryption</option>
+          <option value="aes128">AES-128 (16 bytes)</option>
+          <option value="aes256">AES-256 (32 bytes)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="psk">PSK (Pre-Shared Key):</label>
+        <input type="text" id="psk" name="psk" placeholder="Generated based on PSK Type" readonly>
+        <button type="button" id="generatePSK">Generate PSK</button>
+      </div>
+
+      <div class="form-group">
+        <label for="uplinkEnabled">Uplink Enabled:</label>
+        <input type="checkbox" id="uplinkEnabled" name="uplinkEnabled">
+      </div>
+
+      <div class="form-group">
+        <label for="downlinkEnabled">Downlink Enabled:</label>
+        <input type="checkbox" id="downlinkEnabled" name="downlinkEnabled">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Module Settings</legend>
+
+      <div class="form-group">
+        <label for="positionPrecision">Position Precision (0-32):</label>
+        <input type="number" id="positionPrecision" name="positionPrecision" min="0" max="32" value="0">
+      </div>
+
+      <div class="form-group">
+        <label for="isClientMuted">Is Client Muted:</label>
+        <input type="checkbox" id="isClientMuted" name="isClientMuted">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>LoRa Configuration</legend>
+
+      <div class="form-group">
+        <label for="region">Region:</label>
+        <select id="region" name="region" required>
+          <option value="0">Unset</option>
+          <option value="1">United States</option>
+          <option value="2">EU 433 MHz</option>
+          <option value="3">EU 868 MHz</option>
+          <option value="4">China</option>
+          <option value="5" selected="selected">Japan</option>
+          <option value="6">Australia / New Zealand</option>
+          <option value="7">Korea</option>
+          <option value="8">Taiwan</option>
+          <option value="9">Russia</option>
+          <option value="10">India</option>
+          <option value="11">New Zealand 865 MHz</option>
+          <option value="12">Thailand</option>
+          <option value="13">WLAN Band (LoRa 2.4 GHz)</option>
+          <option value="14">Ukraine 433 MHz</option>
+          <option value="15">Ukraine 868 MHz</option>
+          <option value="16">Malaysia 433 MHz</option>
+          <option value="17">Malaysia 919 MHz</option>
+          <option value="18">Singapore 923 MHz</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="hopLimit">Hop Limit:</label>
+        <input type="number" id="hopLimit" name="hopLimit" min="1" max="7" value="3">
+      </div>
+
+      <div class="form-group">
+        <label for="index">Index (-1 for set by name):</label>
+        <input type="number" id="index" name="index" min="-1" value="0" required>
+      </div>
+
+      <div class="form-group">
+        <label for="channelId">Channel ID:</label>
+        <input type="text" id="channelId" name="channelId" readonly>
+        <button type="button" id="generateChannelId">Generate Channel ID</button>
+      </div>
+
+      <div class="form-group">
+        <label for="ignoreMqtt">Ignore MQTT:</label>
+        <input type="checkbox" id="ignoreMqtt" name="ignoreMqtt">
+      </div>
+
+      <div class="form-group">
+        <label for="configOkToMqtt">Is MQTT OK on outgoing packets:</label>
+        <input type="checkbox" id="configOkToMqtt" name="configOkToMqtt">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Other Settings</legend>
+
+      <div class="form-group">
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+          <option value="1">Primary</option>
+          <option value="2">Secondary</option>
+          <option value="0">Disabled</option>
+        </select>
+      </div>
+    </fieldset>
   </form>
-
-  <canvas id="qrcode"></canvas>
-
-  <div>
-    <input type="text" id="generatedUrl" readonly>
-    <button type="button" id="copyUrlButton">Copy URL</button>
-  </div>
 
 </body>
 </html>
