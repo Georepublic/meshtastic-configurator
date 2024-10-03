@@ -1,90 +1,87 @@
-import { Protobuf } from "@meshtastic/js";
-import QRCode from "qrcode";
-import { fromByteArray } from "base64-js";
+import { getFormValues } from './formHandler';
+import { generatePSK } from './pskGenerator';
+import { buildProtobuf } from './protobufBuilder';
+import { generateQRCode } from './qrCodeGenerator';
+import { getByteLength, generateChannelId, toUrlSafeBase64 } from './utils';
 
 /**
- * Entry point for the application.
- * This function is called when the DOM is fully loaded.
- * @returns void
+ * Handle the DOMContentLoaded event.
+ * Add event listeners to the buttons.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('generateQRCode')?.addEventListener('click', generateQRCode);
-  document.getElementById('generatePSK')?.addEventListener('click', generatePSK);
+  document.getElementById('generateConfig')?.addEventListener('click', generateConfig);
+  document.getElementById('generatePSK')?.addEventListener('click', handleGeneratePSK);
+  document.getElementById('generateChannelId')?.addEventListener('click', handleGenerateChannelId);
+  document.getElementById('pskType')?.addEventListener('change', handlePSKTypeChange);
   document.getElementById('copyUrlButton')?.addEventListener('click', copyUrlToClipboard);
 });
 
 /**
- * Generate a random PSK and set it in the PSK input field.
- * The PSK is a 32-character hexadecimal string.
- * @returns void
+ * Handle the change event on the PSK type select element.
+ * Enable or disable the PSK input field based on the selected PSK type.
  */
-function generatePSK(): void {
+function handlePSKTypeChange(): void {
+  const pskType = (document.getElementById('pskType') as HTMLSelectElement).value;
   const pskField = document.getElementById('psk') as HTMLInputElement;
-  const randomBytes = new Uint8Array(16);
-  window.crypto.getRandomValues(randomBytes);
-  let psk = '';
-  for (let i = 0; i < randomBytes.length; i++) {
-    psk += ('0' + randomBytes[i].toString(16)).slice(-2);
+
+  if (pskType === 'none') {
+    pskField.value = '';
+    pskField.disabled = true;
+  } else {
+    pskField.disabled = false;
+    handleGeneratePSK();
   }
-  pskField.value = psk;
 }
 
 /**
- * Generate a QR code for the given channel name, PSK, and region.
- * The QR code contains a Meshtastic URL that can be used to configure a Meshtastic device.
- * @returns void
+ * Handle the click event on the "Generate PSK" button.
+ * Generate a PSK based on the selected PSK type and set the value in the input field.
  */
-async function generateQRCode(): Promise<void> {
-  const channelName = (document.getElementById('channelName') as HTMLInputElement).value;
-  const psk = (document.getElementById('psk') as HTMLInputElement).value;
-  const region = (document.getElementById('region') as HTMLSelectElement).value;
+function handleGeneratePSK(): void {
+  const pskType = (document.getElementById('pskType') as HTMLSelectElement).value;
+  const psk = generatePSK(pskType);
+  (document.getElementById('psk') as HTMLInputElement).value = psk;
+}
 
-  if (psk.length !== 32) {
-    alert("PSK must be exactly 32 characters long.");
+/**
+ * Handle the click event on the "Generate Channel ID" button.
+ * Generate a random Channel ID and set the value in the input field.
+ */
+function handleGenerateChannelId(): void {
+  const channelId = generateChannelId();
+  (document.getElementById('channelId') as HTMLInputElement).value = channelId;
+}
+
+/**
+ * Generate a QR code based on the form values.
+ */
+async function generateConfig(): Promise<void> {
+  const formValues = getFormValues();
+
+  // Validate channel name length
+  const byteLength = getByteLength(formValues.channelName);
+  if (byteLength > 12) {
+    alert(`Channel name must be less than or equal to 12 bytes (current byte length: ${byteLength}).`);
     return;
   }
 
-  const loraConfig = new Protobuf.Config.Config_LoRaConfig({
-    region: Protobuf.Config.Config_LoRaConfig_RegionCode[region as keyof typeof Protobuf.Config.Config_LoRaConfig_RegionCode]
-  });
+  // Generate the protobuf binary data for the form values
+  const channelSet = buildProtobuf(formValues);
+  const binaryData = channelSet.toBinary();  // Binary data from Protobuf
 
-  const channel = new Protobuf.Channel.ChannelSettings({
-    name: channelName,
-    psk: new TextEncoder().encode(psk)
-  });
+  // Convert to URL-safe Base64 string
+  const base64 = toUrlSafeBase64(binaryData);
 
-  const channelSet = new Protobuf.AppOnly.ChannelSet({
-    loraConfig,
-    settings: [channel]
-  });
-
-  const encoded = channelSet.toBinary();
-  const base64 = fromByteArray(encoded)
-    .replace(/=/g, "")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_");
-
+  // Create the Meshtastic URL
   const meshtasticUrl = `https://meshtastic.org/e/#${base64}`;
+  console.log("Generated Meshtastic URL:", meshtasticUrl);
 
+  // Update the generated URL in the input field
   const urlField = document.getElementById('generatedUrl') as HTMLInputElement;
   urlField.value = meshtasticUrl;
 
-  console.log("Generated Meshtastic URL:", meshtasticUrl);
-
-  const qrCodeElement = document.getElementById('qrcode') as HTMLCanvasElement;
-  qrCodeElement.innerHTML = "";  // Clear previous QR code
-  try {
-    await QRCode.toCanvas(qrCodeElement, meshtasticUrl);
-    console.log('QR code generated successfully!');
-} catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-      alert('QR Code generation failed: ' + error.message);
-    } else {
-      console.error('An unknown error occurred:', error);
-      alert('An unknown error occurred');
-    }
-  }
+  // Generate the QR code from the URL
+  await generateQRCode(meshtasticUrl);
 }
 
 /**
