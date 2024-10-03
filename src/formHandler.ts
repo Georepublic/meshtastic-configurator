@@ -1,5 +1,3 @@
-import { generateChannelId } from "./utils";
-
 /**
  * Get the values from the form using FormData API.
  */
@@ -10,7 +8,7 @@ export function getFormValues() {
     throw new Error('Form element not found.');
   }
 
-  const formData = new FormData(form);  // Pass the form to FormData
+  const formData = new FormData(form);
 
   // Extract form values and ensure the correct types
   const channelName = formData.get('channelName') as string;
@@ -22,7 +20,8 @@ export function getFormValues() {
   const modemPreset = Number(formData.get('modemPreset'));
   const hopLimit = Number(formData.get('hopLimit'));
 
-  const uplinkEnabled = formData.get('uplinkEnabled') === 'on';  // Checkbox returns 'on' or undefined
+  // Checkboxes return 'on' or undefined
+  const uplinkEnabled = formData.get('uplinkEnabled') === 'on';
   const downlinkEnabled = formData.get('downlinkEnabled') === 'on';
   const positionPrecision = Number(formData.get('positionPrecision'));
   const isClientMuted = formData.get('isClientMuted') === 'on';

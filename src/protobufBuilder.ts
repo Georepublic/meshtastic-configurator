@@ -52,8 +52,6 @@ export function buildProtobuf({
     configOkToMqtt: configOkToMqtt || false,
   });
 
-  console.log(configOkToMqtt, ignoreMqtt);
-
   const moduleSettings = new Protobuf.Channel.ModuleSettings({
     positionPrecision: positionPrecision || 0,
     isClientMuted: isClientMuted || false,
