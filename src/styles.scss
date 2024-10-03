@@ -1,3 +1,7 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
 fieldset {
   margin-bottom: 20px;
   padding: 10px;
@@ -31,4 +35,25 @@ button#generateConfig {
   color: white;
   border: #4CAF50 1px solid;
   font-size: large;
+}
+
+#copyNotification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  z-index: 1000;
+}
+
+#copyNotification.show {
+  visibility: visible;
+  opacity: 1;
 }

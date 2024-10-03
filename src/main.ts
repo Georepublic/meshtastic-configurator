@@ -99,13 +99,29 @@ async function generateConfig(): Promise<void> {
 function copyUrlToClipboard(): void {
   const urlField = document.getElementById('generatedUrl') as HTMLInputElement;
 
-  // Use the Clipboard API to copy the URL
   navigator.clipboard.writeText(urlField.value)
-      .then(() => {
-          alert('URL copied to clipboard!');
-      })
-      .catch(err => {
-          console.error('Failed to copy text: ', err);
-          alert('Failed to copy URL');
-      });
+    .then(() => {
+      showCopyNotification();
+    })
+    .catch(err => {
+      console.error('Failed to copy text: ', err);
+      alert('Failed to copy URL');
+    });
 }
+
+/**
+ * Show the "URL copied" notification with animation
+ */
+function showCopyNotification(): void {
+  const notification = document.getElementById('copyNotification');
+
+  if (notification) {
+    notification.classList.add('show');
+
+    // Hide the notification after 2 seconds
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 2000);
+  }
+}
+

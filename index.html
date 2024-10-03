@@ -12,10 +12,10 @@
 
   <form id="meshtasticForm">
     <fieldset>
-      <legend>Generate Configuration</legend>
+      <legend>Share this with others</legend>
 
       <div class="form-group">
-        <button type="button" id="generateConfig">Generate Configuration (QR Code)</button>
+        <canvas id="qrcode"></canvas>
       </div>
 
       <div class="form-group">
@@ -25,7 +25,7 @@
       </div>
 
       <div class="form-group">
-        <canvas id="qrcode"></canvas>
+        <button type="button" id="generateConfig">Generate Configuration (QR Code)</button>
       </div>
     </fieldset>
 
@@ -135,6 +135,8 @@
       </div>
     </fieldset>
   </form>
+
+  <div id="copyNotification" class="hidden">URL copied to clipboard!</div>
 
   <script type="module" src="./src/main.ts"></script>
 </body>
