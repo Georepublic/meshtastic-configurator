@@ -6,6 +6,22 @@ import { loadConfigurationFromHash } from './loadConfigurationFromHash';
 import { copyUrlToClipboard } from './utils';
 
 /**
+ * Register the service worker in production mode.
+ */
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/meshtastic-configurator/sw.js')
+      .then((registration) => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      })
+      .catch((error) => {
+        console.log('ServiceWorker registration failed: ', error);
+      });
+  });
+}
+
+/**
  * Handle the DOMContentLoaded event.
  * Add event listeners to the buttons and form fields.
  */

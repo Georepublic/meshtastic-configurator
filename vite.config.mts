@@ -1,11 +1,19 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
   base: '/meshtastic-configurator/',
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern'  // Use the modern Sass API
+        api: 'modern'
+      }
+    }
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html')
       }
     }
   }

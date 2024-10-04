@@ -7,6 +7,7 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/qrcode": "^1.5.5",
+    "@types/serviceworker": "^0.0.97",
     "concurrently": "^9.0.1",
     "http-server": "^14.1.1",
     "typescript": "^5.6.2",
