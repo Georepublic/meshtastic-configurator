@@ -17,8 +17,8 @@ self.addEventListener("install", event => {
       const urlsToCache = [
         "/meshtastic-configurator/",
         "/meshtastic-configurator/index.html",
-        `/meshtastic-configurator/${manifest['src/main.ts'].file}`,
-        `/meshtastic-configurator/${manifest['src/styles.css'].file}`,
+        `/meshtastic-configurator/${manifest?.['src/main.ts']?.file}`,
+        `/meshtastic-configurator/${manifest?.['src/styles.css']?.file}`,
         "/meshtastic-configurator/assets/icon-192x192.png",
         "/meshtastic-configurator/assets/icon-512x512.png"
       ];
