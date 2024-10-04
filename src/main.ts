@@ -8,17 +8,14 @@ import { copyUrlToClipboard } from './utils';
 /**
  * Register the service worker in production mode.
  */
-if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/meshtastic-configurator/sw.js')
-      .then((registration) => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      })
-      .catch((error) => {
-        console.log('ServiceWorker registration failed: ', error);
-      });
-  });
+if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/meshtastic-configurator/sw.js')
+    .then(reg => {
+      console.log('Service Worker registered!', reg);
+    })
+    .catch(err => {
+      console.error('Service Worker registration failed:', err);
+    });
 }
 
 /**
