@@ -1,0 +1,21 @@
+{
+  "name": "Meshtastic Configurator",
+  "short_name": "Configurator",
+  "description": "Meshtastic QR Code Generator",
+  "start_url": "/meshtastic-configurator/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4CAF50",
+  "icons": [
+    {
+      "src": "/meshtastic-configurator/assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/meshtastic-configurator/assets/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
