@@ -1,2 +1,5 @@
 dist
 node_modules
+protos
+profiles/**/*.cfg
+profiles/**/*.json
