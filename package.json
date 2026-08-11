@@ -10,7 +10,7 @@
     "@types/serviceworker": "^0.0.200",
     "concurrently": "^10.0.4",
     "http-server": "^14.1.1",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite": "^8.2.0"
   },
   "type": "module",
