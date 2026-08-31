@@ -11,14 +11,14 @@
     "concurrently": "^10.0.5",
     "http-server": "^14.1.1",
     "typescript": "^7.0.2",
-    "vite": "^8.2.1"
+    "vite": "^8.2.2"
   },
   "type": "module",
   "dependencies": {
     "@meshtastic/js": "^2.3.7-5",
     "base64-js": "^1.5.1",
     "qrcode": "^1.5.4",
-    "sass": "^1.102.0"
+    "sass": "^1.103.1"
   },
   "scripts": {
     "dev": "vite",
