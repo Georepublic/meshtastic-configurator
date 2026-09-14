@@ -7,7 +7,7 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/qrcode": "^1.5.6",
-    "@types/serviceworker": "^0.0.200",
+    "@types/serviceworker": "^0.0.201",
     "concurrently": "^10.0.5",
     "http-server": "^14.1.1",
     "typescript": "^7.0.2",
@@ -18,7 +18,7 @@
     "@meshtastic/js": "^2.3.7-5",
     "base64-js": "^1.5.1",
     "qrcode": "^1.5.4",
-    "sass": "^1.103.1"
+    "sass": "^1.104.0"
   },
   "scripts": {
     "dev": "vite",
